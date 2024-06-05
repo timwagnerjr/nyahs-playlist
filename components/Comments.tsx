@@ -93,7 +93,7 @@ export default function Comments({ trackId, user }: CommentsProps) {
           className="bg-spotify-green text-white p-2 rounded-lg"
           disabled={isLoading}
         >
-          {isLoading ? <Spinner /> : "Submit"}
+          {isLoading ? <Spinner /> : "Add Thought"}
         </button>
       </div>
     </div>

@@ -12,8 +12,41 @@ export default async function Home() {
   console.log("Retrieved Access Token:", accessToken);
   console.log("Retrieved User:", user);
 
+  const playlistUrl = `https://open.spotify.com/playlist/${process.env.SPOTIFY_PLAYLIST_ID}`;
+
   if (!accessToken) {
-    return <p>Error: No access token</p>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
+        <h1 className="text-5xl font-bold mb-4 text-center">Our Playlist</h1>
+        <p className="text-xl mb-6 text-center">
+          Happy Birthday, Nyah! 🎂 To celebrate, I&apos;ve created a special
+          playlist for us to share. I&apos;ve added the first 15 songs have a
+          vibe I think we both like. Now it&apos;s your turn to add your
+          favorites! Let&apos;s make this playlist ours. Add songs, tell me why
+          you like them, then we can discuss them!
+        </p>
+        <p className="text-xl mb-6 text-center">
+          To get started, log in with your Spotify account. You can add songs,
+          leave comments, and discuss each track with me. Can&apos;t wait to see
+          what add and hear what you think!
+        </p>
+
+        <a
+          href="/api/auth/login"
+          className="bg-spotify-green mb-4 text-white py-2 px-4 rounded-lg text-xl hover:bg-spotify-green-dark transition duration-300"
+        >
+          Login with Spotify
+        </a>
+        <a
+          href={playlistUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-white py-2 px-4 text-md transition duration-300 mb-4"
+        >
+          View Playlist on Spotify
+        </a>
+      </div>
+    );
   }
 
   let parsedUser: User;
@@ -28,7 +61,9 @@ export default async function Home() {
 
   return (
     <div className="container mx-auto">
-      <Playlist tracks={tracks} user={parsedUser} />
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-2">
+        <Playlist tracks={tracks} user={parsedUser} />
+      </div>
     </div>
   );
 }

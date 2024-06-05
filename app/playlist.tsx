@@ -35,14 +35,23 @@ export default function Playlist({ tracks, user }: PlaylistProps) {
   const totalSeconds = Math.floor((totalDuration % 60000) / 1000);
 
   return (
-    <div className="bg-gray-900 text-white p-4 min-h-screen">
-      <h1 className="text-4xl font-bold mb-2 text-center">Nyahs Playlist</h1>
-      <div className="text-center mb-6">
-        <p className="text-lg">Total songs: {tracks.length}</p>
-        <p className="text-lg">
-          Total duration: {totalMinutes}m {totalSeconds < 10 ? "0" : ""}
-          {totalSeconds}s
+    <div className="bg-gray-900 text-white p-2 min-h-screen">
+      <h1 className="text-2xl font-bold mb-2 text-left">
+        Daddy & Nyah&apos;s Song List
+      </h1>
+      <div className="text-left mb-6">
+        <p className="text-lg mb-2">
+          {tracks.length} songs | {totalMinutes}m {totalSeconds < 10 ? "0" : ""}
+          {totalSeconds}s play time
         </p>
+        <a
+          href={`https://open.spotify.com/playlist/${process.env.SPOTIFY_PLAYLIST_ID}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-spotify-green hover:underline"
+        >
+          See playlist on Spotify
+        </a>
       </div>
       <div className="grid gap-6">
         {tracks.map((track, index) => (
