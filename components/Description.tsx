@@ -3,20 +3,41 @@
 import { useState } from "react";
 import { client } from "../sanity/lib/client";
 import Spinner from "./Spinner";
+import { Track as TrackType, User } from "../types";
+
+interface DescriptionProps {
+  track: TrackType;
+  user: User;
+  description: TrackType["description"];
+  setDescription: (description: TrackType["description"]) => void;
+}
 
 export default function Description({
   track,
   user,
   description,
   setDescription,
-}) {
+}: DescriptionProps) {
   const [newDescription, setNewDescription] = useState(
     description ? description.description : ""
   );
   const [isLoading, setIsLoading] = useState(false);
 
+  if (!track.track) {
+    return (
+      <div className="bg-gray-700 p-4 rounded-lg">
+        Track data is unavailable.
+      </div>
+    );
+  }
+
   const handleAddDescription = async () => {
     if (!newDescription.trim()) return;
+
+    if (!track.track) {
+      console.error("Track data is unavailable.");
+      return;
+    }
 
     const descriptionData = {
       _id: track.track.id, // Use the Spotify ID as the Sanity document ID
@@ -51,7 +72,6 @@ export default function Description({
         ) : (
           <div className="flex flex-col md:flex-row items-start md:items-center">
             <textarea
-              type="textarea"
               value={newDescription}
               onChange={(e) => setNewDescription(e.target.value)}
               placeholder="Add why you like this song"

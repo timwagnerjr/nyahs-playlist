@@ -3,9 +3,15 @@
 import { useState, useEffect } from "react";
 import { client } from "../sanity/lib/client";
 import Spinner from "./Spinner";
+import { Comment, User } from "../types";
 
-export default function Comments({ trackId, user }) {
-  const [comments, setComments] = useState([]);
+interface CommentsProps {
+  trackId: string;
+  user: User;
+}
+
+export default function Comments({ trackId, user }: CommentsProps) {
+  const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -13,11 +19,11 @@ export default function Comments({ trackId, user }) {
     fetchComments(trackId);
   }, [trackId]);
 
-  const fetchComments = async (trackId) => {
+  const fetchComments = async (trackId: string) => {
     const query = `*[_type == "comment" && track._ref == $trackId] | order(createdAt asc)`;
     const params = { trackId };
     try {
-      const fetchedComments = await client.fetch(query, params);
+      const fetchedComments = await client.fetch<Comment[]>(query, params);
       setComments(fetchedComments);
     } catch (err) {
       console.error("Error fetching comments:", err);
@@ -27,11 +33,12 @@ export default function Comments({ trackId, user }) {
   const handleAddComment = async () => {
     if (!newComment.trim()) return;
 
-    const comment = {
+    const comment: Comment = {
+      _id: "", // Will be assigned by Sanity
       _type: "comment",
       track: {
-        _type: "reference",
         _ref: trackId,
+        _type: "reference",
       },
       text: newComment,
       user: user.display_name || user.id,

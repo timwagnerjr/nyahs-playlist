@@ -1,4 +1,4 @@
-import { type SchemaTypeDefinition } from 'sanity';
+import { type SchemaTypeDefinition } from '@sanity/types';
 
 const track: SchemaTypeDefinition = {
   name: 'track',

@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { getPlaylistTracks } from "../lib/spotify";
 import Playlist from "./playlist";
+import { Track, User } from "../types";
 
 export default async function Home() {
   const cookieStore = cookies();
@@ -15,11 +16,19 @@ export default async function Home() {
     return <p>Error: No access token</p>;
   }
 
-  const tracks = await getPlaylistTracks(accessToken);
+  let parsedUser: User;
+  try {
+    parsedUser = JSON.parse(user as string);
+  } catch (error) {
+    console.error("Error parsing user:", error);
+    return <p>Error: Invalid user data</p>;
+  }
+
+  const tracks: Track[] = await getPlaylistTracks(accessToken);
 
   return (
     <div className="container mx-auto">
-      <Playlist tracks={tracks} user={JSON.parse(user)} />
+      <Playlist tracks={tracks} user={parsedUser} />
     </div>
   );
 }
