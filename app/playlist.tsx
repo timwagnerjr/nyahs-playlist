@@ -30,7 +30,9 @@ export default function Playlist({ tracks, user }) {
 
   return (
     <div className="bg-gray-900 text-white p-4 min-h-screen">
-      <h1 className="text-4xl font-bold mb-2 text-center">Nyah's Playlist</h1>
+      <h1 className="text-4xl font-bold mb-2 text-center">
+        Nyah&apos;s Playlist
+      </h1>
       <div className="text-center mb-6">
         <p className="text-lg">Total songs: {tracks.length}</p>
         <p className="text-lg">
