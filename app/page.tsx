@@ -20,10 +20,10 @@ export default async function Home() {
         <h1 className="text-5xl font-bold mb-4 text-center">Our Playlist</h1>
         <p className="text-xl mb-6 text-center">
           Happy Birthday, Nyah! 🎂 To celebrate, I&apos;ve created a special
-          playlist for us to share. I&apos;ve added the first 15 songs have a
-          vibe I think we both like. Now it&apos;s your turn to add your
-          favorites! Let&apos;s make this playlist ours. Add songs, tell me why
-          you like them, then we can discuss them!
+          playlist for us to share. I&apos;ve added the first 15 songs that have
+          a vibe I think we both like. Now it&apos;s your turn to add your
+          favorites! Add songs, tell me why you like them, then we can discuss
+          them!
         </p>
         <p className="text-xl mb-6 text-center">
           To get started, log in with your Spotify account. You can add songs,
