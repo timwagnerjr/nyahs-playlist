@@ -5,6 +5,8 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const code = searchParams.get('code') || null;
 
+  console.log('Received authorization code:', code);
+
   const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.NEXT_PUBLIC_REDIRECT_URI,
     clientId: process.env.SPOTIFY_CLIENT_ID,
@@ -15,18 +17,17 @@ export async function GET(req: NextRequest) {
     const data = await spotifyApi.authorizationCodeGrant(code as string);
     const { access_token, refresh_token, expires_in } = data.body;
 
+    console.log('Access Token:', access_token);
+    console.log('Refresh Token:', refresh_token);
+
     // Set access token to fetch user profile
     spotifyApi.setAccessToken(access_token);
 
     // Fetch user profile
     const userProfile = await spotifyApi.getMe();
-
-    // Log the tokens and user profile to verify they are being retrieved
-    console.log('Access Token:', access_token);
-    console.log('Refresh Token:', refresh_token);
     console.log('User Profile:', userProfile.body);
 
-    // Store the tokens and user profile in cookies for this example (in a real app, use a more secure method)
+    // Store the tokens and user profile in cookies
     const response = NextResponse.redirect(
       new URL('/', process.env.NEXT_PUBLIC_BASE_URL)
     );
