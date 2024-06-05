@@ -33,8 +33,7 @@ export default function Comments({ trackId, user }: CommentsProps) {
   const handleAddComment = async () => {
     if (!newComment.trim()) return;
 
-    const comment: Comment = {
-      _id: "", // Will be assigned by Sanity
+    const comment: Omit<Comment, "_id"> = {
       _type: "comment",
       track: {
         _ref: trackId,
@@ -48,8 +47,8 @@ export default function Comments({ trackId, user }: CommentsProps) {
     setIsLoading(true);
 
     try {
-      await client.create(comment);
-      setComments([...comments, comment]);
+      const createdComment = await client.create(comment);
+      setComments([...comments, createdComment]);
       setNewComment("");
     } catch (err) {
       console.error("Error adding comment:", err);
@@ -65,7 +64,11 @@ export default function Comments({ trackId, user }: CommentsProps) {
         {comments.map((comment, index) => (
           <div
             key={index}
-            className={`flex flex-col ${comment.user === user.display_name || comment.user === user.id ? "items-end" : "items-start"}`}
+            className={`flex flex-col ${
+              comment.user === user.display_name || comment.user === user.id
+                ? "items-end"
+                : "items-start"
+            }`}
           >
             <p className="text-gray-400 text-sm mb-1">{comment.user}</p>
             <div
