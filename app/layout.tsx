@@ -2,6 +2,8 @@ import "./globals.css";
 import { ReactNode } from "react";
 import { Metadata } from "next";
 import ClientLayout from "./ClientLayout";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: "Nyah's Playlist",
@@ -16,6 +18,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body>
         <ClientLayout>{children}</ClientLayout>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

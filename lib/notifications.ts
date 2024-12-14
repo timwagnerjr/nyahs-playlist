@@ -1,9 +1,13 @@
 import webpush from 'web-push';
 import { client } from '@/sanity/lib/client';
 
-const publicVapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!;
-const privateVapidKey = process.env.VAPID_PRIVATE_KEY!;
-const subject = process.env.VAPID_SUBJECT!;
+const publicVapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+const privateVapidKey = process.env.VAPID_PRIVATE_KEY;
+const subject = process.env.VAPID_SUBJECT;
+
+if (!publicVapidKey || !privateVapidKey || !subject) {
+    throw new Error('Missing VAPID configuration. Please check your environment variables.');
+}
 
 webpush.setVapidDetails(subject, publicVapidKey, privateVapidKey);
 
