@@ -18,13 +18,15 @@
     "react-dom": "^18",
     "sanity": "^3.44.0",
     "spotify-web-api-node": "^5.0.2",
-    "styled-components": "^6.1.11"
+    "styled-components": "^6.1.11",
+    "web-push": "^3.6.7"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/spotify-web-api-node": "^5.0.11",
+    "@types/web-push": "^3.6.4",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",

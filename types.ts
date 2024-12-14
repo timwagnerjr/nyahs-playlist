@@ -8,27 +8,28 @@ export interface Track {
     };
     artists: { name: string }[];
     duration_ms: number;
-    preview_url: string | null;
+    spotify_url: string;
   } | null;
   added_by?: {
-    display_name?: string;
     id: string;
+    displayName: string;
   };
-    description?: {
-        description: string;
-        addedBy: string;
-    };
+  description?: string;
+  currentlyInPlaylist?: boolean;
+  comments?: Comment[];
 }
 
 export interface Comment {
-    _id: string;
-    _type: string;
+  _id: string;
+  _type: string;
   track: {
     _ref: string;
     _type: string;
   };
   text: string;
   user: string;
+  userDisplayName?: string;
+  userAvatar?: string;
   createdAt: string;
 }
 

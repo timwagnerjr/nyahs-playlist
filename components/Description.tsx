@@ -1,15 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { client } from "../sanity/lib/client";
-import Spinner from "./Spinner";
-import { Track as TrackType, User } from "../types";
+import { Track, User } from "../types";
+import { updateDescription } from "../app/actions";
 
 interface DescriptionProps {
-  track: TrackType;
+  track: Track;
   user: User;
-  description: TrackType["description"];
-  setDescription: (description: TrackType["description"]) => void;
+  description?: string;
+  setDescription: (description: string | undefined) => void;
 }
 
 export default function Description({
@@ -18,75 +17,94 @@ export default function Description({
   description,
   setDescription,
 }: DescriptionProps) {
-  const [newDescription, setNewDescription] = useState(
-    description ? description.description : ""
-  );
-  const [isLoading, setIsLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [newDescription, setNewDescription] = useState(description || "");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (!track.track) {
-    return (
-      <div className="bg-gray-700 p-4 rounded-lg">
-        Track data is unavailable.
-      </div>
-    );
-  }
+  console.log("User ID:", user.id);
+  console.log("Track added by:", track.added_by);
+  console.log("Is owner:", user.id === track.added_by?.id);
 
-  const handleAddDescription = async () => {
-    if (!newDescription.trim()) return;
+  const isOwner = user.id === track.added_by?.id;
 
-    if (!track.track) {
-      console.error("Track data is unavailable.");
-      return;
-    }
+  const handleSubmit = async () => {
+    if (!track.track) return;
 
-    const descriptionData = {
-      _id: track.track.id, // Use the Spotify ID as the Sanity document ID
-      _type: "track",
-      spotifyId: track.track.id,
-      name: track.track.name,
-      album: track.track.album.name,
-      artists: track.track.artists.map((artist) => artist.name),
-      addedBy: user.display_name || user.id,
-      description: newDescription,
-      image: track.track.album.images[0]?.url || "", // Assuming the first image is the album cover
-    };
-
-    setIsLoading(true);
-
+    setIsSubmitting(true);
     try {
-      await client.createOrReplace(descriptionData);
-      setDescription(descriptionData);
-    } catch (err) {
-      console.error("Error adding description:", err);
+      const result = await updateDescription(
+        track.track.id,
+        newDescription,
+        user.id
+      );
+      if (result.success) {
+        setDescription(newDescription);
+        setIsEditing(false);
+      } else {
+        console.error("Failed to update description");
+      }
+    } catch (error) {
+      console.error("Error updating description:", error);
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
+  if (!track.track) return null;
+
   return (
-    <div className="bg-gray-700 p-4 rounded-lg">
-      <h3 className="text-lg font-semibold mb-2">Why I Like This Song</h3>
-      <div>
-        {description ? (
-          <p className="text-gray-300">{description.description}</p>
-        ) : (
-          <div className="flex flex-col md:flex-row items-start md:items-center">
-            <textarea
-              value={newDescription}
-              onChange={(e) => setNewDescription(e.target.value)}
-              placeholder="Add why you like this song"
-              className="bg-gray-700 w-full text-white p-2 rounded-lg flex-1 mb-2 md:mb-0 md:mr-2 focus:outline-none focus:ring-2 focus:ring-spotify-green"
-            />
+    <div className="bg-gray-700 p-4 rounded">
+      <h3 className="text-lg font-semibold mb-4">Why I Like This Song</h3>
+      {isEditing ? (
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="song-description" className="sr-only">
+            Why you like this song
+          </label>
+          <textarea
+            id="song-description"
+            value={newDescription || ""}
+            onChange={(e) => setNewDescription(e.target.value)}
+            className="w-full p-2 bg-gray-800 text-white rounded mb-2"
+            rows={3}
+            placeholder="Tell us why you like this song..."
+            aria-label="Song description"
+          />
+          <div className="flex gap-2">
             <button
-              onClick={handleAddDescription}
-              className="bg-spotify-green text-white p-2 rounded-lg"
-              disabled={isLoading}
+              type="submit"
+              className="text-spotify-green hover:underline"
+              disabled={isSubmitting}
             >
-              {isLoading ? <Spinner /> : "Add Description"}
+              {isSubmitting ? "Saving..." : "Save"}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setIsEditing(false);
+                setNewDescription(description || "");
+              }}
+              className="text-gray-400 hover:underline"
+            >
+              Cancel
             </button>
           </div>
-        )}
-      </div>
+        </form>
+      ) : (
+        <div className="bg-gray-700 rounded">
+          <p className="text-gray-300">
+            {description ||
+              "No description yet. Add one to explain why you like this song!"}
+          </p>
+          {user && (
+            <button
+              onClick={() => setIsEditing(true)}
+              className="text-spotify-green hover:underline mt-2"
+            >
+              {description ? "Edit" : "Add Description"}
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

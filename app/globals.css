@@ -2,54 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+  --spotify-green: #1db954;
+  --spotify-green-dark: #1aa34a;
+  --background-dark: #121212;
+  --surface-dark: #181818;
+  --surface-dark-hover: #282828;
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --text-subdued: #6a6a6a;
 }
 
 body {
   font-family: "Inter", sans-serif;
-}
-
-a {
-  transition: color 0.2s ease;
-}
-
-a:hover {
-  color: #1db954;
-}
-
-button {
-  transition: background-color 0.2s ease;
-}
-
-button:hover {
-  background-color: #1aa34a;
+  background-color: var(--background-dark);
+  color: var(--text-primary);
+  line-height: 1.6;
 }

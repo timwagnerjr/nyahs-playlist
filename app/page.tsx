@@ -1,18 +1,17 @@
 import { cookies } from "next/headers";
 import { getPlaylistTracks } from "../lib/spotify";
-import Playlist from "./playlist";
+import PlaylistServer from "./PlaylistServer";
 import { Track, User } from "../types";
 
 export default async function Home() {
   const cookieStore = cookies();
   const accessToken = cookieStore.get("spotify_access_token")?.value;
   const user = cookieStore.get("spotify_user")?.value;
+  const playlistId = process.env.SPOTIFY_PLAYLIST_ID;
 
   // Log the retrieved access token and user
   console.log("Retrieved Access Token:", accessToken);
   console.log("Retrieved User:", user);
-
-  const playlistUrl = `https://open.spotify.com/playlist/${process.env.SPOTIFY_PLAYLIST_ID}`;
 
   if (!accessToken) {
     return (
@@ -38,7 +37,7 @@ export default async function Home() {
           Login with Spotify
         </a>
         <a
-          href={playlistUrl}
+          href={`https://open.spotify.com/playlist/${playlistId}`}
           target="_blank"
           rel="noopener noreferrer"
           className="text-white py-2 px-4 text-md transition duration-300 mb-4"
@@ -62,7 +61,11 @@ export default async function Home() {
   return (
     <div className="container mx-auto">
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-2">
-        <Playlist tracks={tracks} user={parsedUser} />
+        <PlaylistServer
+          tracks={tracks}
+          user={parsedUser}
+          playlistId={playlistId || ""}
+        />
       </div>
     </div>
   );
