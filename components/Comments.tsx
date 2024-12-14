@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Comment, User } from "@/types";
 import DefaultAvatar from "./DefaultAvatar";
+import Image from "next/image";
 
 interface CommentsProps {
   trackId: string;
@@ -104,9 +105,11 @@ export default function Comments({
           <div key={comment._id} className="bg-gray-800 p-3 rounded flex gap-3">
             <div className="flex-shrink-0">
               {userImages[comment.user] ? (
-                <img
+                <Image
                   src={userImages[comment.user]}
                   alt={comment.userDisplayName || comment.user}
+                  width={32}
+                  height={32}
                   className="w-8 h-8 rounded-full bg-gray-700"
                 />
               ) : (
