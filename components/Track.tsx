@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Description from "./Description";
 import Comments from "./Comments";
 import { Track as TrackType, User } from "../types";
+import Image from "next/image";
 
 interface TrackProps {
   track: TrackType;
@@ -33,9 +34,11 @@ export default function Track({
       className={`p-4 ${track.currentlyInPlaylist ? "bg-gray-800" : "bg-gray-800"} rounded-lg flex flex-col items-start`}
     >
       <div className="flex flex-row items-top w-full">
-        <img
+        <Image
           src={track.track.album.images[0].url}
           alt={track.track.album.name}
+          width={80}
+          height={80}
           className="w-20 h-20 rounded shadow-lg mr-4 mt-1"
         />
         <div className="flex-1">
@@ -78,6 +81,7 @@ export default function Track({
           <h3 className="text-lg font-semibold mb-4">Thoughts</h3>
           <Comments
             trackId={track.track.id}
+            trackName={track.track.name}
             user={user}
             initialComments={track.comments}
           />
